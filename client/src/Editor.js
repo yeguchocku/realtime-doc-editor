@@ -1,3 +1,4 @@
+import API_BASE from "./config";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import ReactQuill, { Quill } from "react-quill";
@@ -26,7 +27,7 @@ export default function Editor({ username, documentId,goBack }) {
   // 🔹 Connect socket once
   useEffect(() => {
 
-    socketRef.current = io("http://localhost:5000");
+    socketRef.current = io(API_BASE);
     return () => socketRef.current.disconnect();
   }, []);
 
