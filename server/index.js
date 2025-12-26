@@ -6,8 +6,8 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 
-import Document from "./models/document";
-import User from "./models/user";
+import Document from "./models/document.js";
+import User from "./models/user.js";
 
 const app = express();
 app.use(cors());
