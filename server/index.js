@@ -21,6 +21,9 @@ mongoose
   .catch(err => console.error(err));
 
 // ------------------ Auth APIs ------------------
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
 
 // Register
 app.post("/register", async (req, res) => {
