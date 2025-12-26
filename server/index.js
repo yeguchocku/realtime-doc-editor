@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 dotenv.config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const http = require("http");
-const { Server } = require("socket.io");
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
 
-const Document = require("./models/document");
-const User = require("./models/user");
+import Document from "./models/document";
+import User from "./models/user";
 
 const app = express();
 app.use(cors());

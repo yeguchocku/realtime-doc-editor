@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-
+import mongoose from "mongoose";
 const DocumentSchema = new mongoose.Schema({
   
   title: {
@@ -16,4 +15,4 @@ const DocumentSchema = new mongoose.Schema({
   },
 },{timestamps: true});
 
-module.exports = mongoose.model("Document", DocumentSchema);
+export default mongoose.model("User", userSchema);
