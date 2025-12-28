@@ -17,6 +17,7 @@ export default function Editor({ username, documentId,goBack }) {
   const wordInputRef = useRef(null);
   const pdfInputRef = useRef(null);
  
+  const socket = io("https://realtime-doc-editor-wedl.onrender.com");
   const [documentLoaded, setDocumentLoaded] = useState(false);
   const [docTitle, setDocTitle] = useState("Untitled Document");
   // Random color per user

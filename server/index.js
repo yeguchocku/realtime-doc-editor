@@ -5,14 +5,22 @@ import mongoose from "mongoose";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-
+import path from "path";
+import { fileURLToPath } from "url";
 import Document from "./models/document.js";
 import User from "./models/user.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+app.use(express.static(path.join(__dirname, "../client/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+});
 
 // ------------------ MongoDB ------------------
 mongoose
@@ -27,42 +35,62 @@ app.get("/", (req, res) => {
 
 // Register
 app.post("/register", async (req, res) => {
-  const { email, username, password } = req.body;
+  try {
+    const { email, username, password } = req.body;
 
-  if (!email || !username || !password) {
-    return res.status(400).json({ message: "All fields required" });
+    if (!email || !username || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    const exists = await User.findOne({ $or: [{ email }, { username }] });
+    if (exists) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const user = await User.create({ email, username, password });
+
+    return res.status(201).json({
+      message: "User registered successfully",
+      user: {
+        email: user.email,
+        username: user.username,
+      },
+    });
+  } catch (err) {
+    console.error("Register error:", err);
+    return res.status(500).json({ message: "Server error" });
   }
-
-  const exists = await User.findOne({ $or: [{ email }, { username }] });
-  if (exists) {
-    return res.status(400).json({ message: "User already exists" });
-  }
-
-  const user = await User.create({ email, username, password });
-  res.status(201).json({
-    message: "User registered successfully",
-    user: { email: user.email, username: user.username }
-  });
 });
+
 
 // Login
 app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  try {
+    const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ message: "All fields required" });
+    if (!username || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    const user = await User.findOne({ username });
+
+    if (!user || user.password !== password) {
+      return res.status(400).json({ message: "Invalid username or password" });
+    }
+
+    return res.status(200).json({
+      message: "Login successful",
+      user: {
+        email: user.email,
+        username: user.username,
+      },
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    return res.status(500).json({ message: "Server error" });
   }
-
-  const user = await User.findOne({ username });
-  if (!user || user.password !== password) {
-    return res.status(400).json({ message: "Invalid username or password" });
-  }
-
-  res.status(200).json({
-    message: "Login successful",
-    user: { email: user.email, username: user.username }
-  });
 });
+
 // ------------------ Document APIs ------------------
 
 // Create new document
