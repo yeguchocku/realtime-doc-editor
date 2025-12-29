@@ -39,22 +39,28 @@ function App() {
     }
   };
 // --- LOGIN ---
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`${API_BASE}/register`,{
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: loginUsername, password: loginPassword }),
-      });
-      const data = await res.json();
-      if (!res.ok) return alert(data.message);
-      setUser(data.user);
-      setLoggedIn(true);
-    } catch (err) {
-      alert("Server error: " + err.message);
-    }
-  };
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await fetch(`${API_BASE}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: loginUsername,
+        password: loginPassword
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) return alert(data.message);
+
+    setUser(data.user);
+    setLoggedIn(true);
+  } catch (err) {
+    alert("Server error: " + err.message);
+  }
+};
+
 // --- REGISTER PAGE ---
   if (showRegister) {
   return (
