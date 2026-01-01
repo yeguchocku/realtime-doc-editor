@@ -1,2 +1,2 @@
-const API_BASE = "https://realtime-doc-editor-wedl.onrender.com";
+const API_BASE = "http://localhost:5000";
 export default API_BASE;

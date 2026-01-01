@@ -5,22 +5,13 @@ import mongoose from "mongoose";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import path from "path";
-import { fileURLToPath } from "url";
 import Document from "./models/document.js";
 import User from "./models/user.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, "../client/build")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-});
 
 // ------------------ MongoDB ------------------
 mongoose

@@ -17,7 +17,6 @@ export default function Editor({ username, documentId,goBack }) {
   const wordInputRef = useRef(null);
   const pdfInputRef = useRef(null);
  
-  const socket = io("https://realtime-doc-editor-wedl.onrender.com");
   const [documentLoaded, setDocumentLoaded] = useState(false);
   const [docTitle, setDocTitle] = useState("Untitled Document");
   // Random color per user
@@ -149,7 +148,7 @@ const renameDocument = async () => {
     const newTitle = prompt("Enter new title", docTitle);
     if (!newTitle) return;
 
-    const res = await fetch(`http://localhost:5000/documents/${documentId}`, {
+    const res = await fetch(`${API_BASE}/documents/${documentId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTitle }),
